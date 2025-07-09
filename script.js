@@ -14,20 +14,16 @@ const couponHomeButton = document.getElementById('couponHomeButton');
 
 // 게임 요소들
 const problemElement = document.getElementById('problem');
-const answerInput = document.getElementById('answerInput');
+const selectedAnswerElement = document.getElementById('selectedAnswer');
 const scoreCount = document.getElementById('scoreCount');
 const timerBar = document.getElementById('timerBar');
 const couponCanvas = document.getElementById('couponCanvas');
+const noteButtons = document.querySelectorAll('.note-btn');
 
 // 오디오 요소들
 const successSound = document.getElementById('successSound');
 const failSound = document.getElementById('failSound');
 const couponSound = document.getElementById('couponSound');
-
-// 게임 상태 변수들
-let currentAnswer = 0;
-let consecutiveCorrect = 0;
-let timerInterval;
 
 // 까마귀 이미지 요소 생성
 const failImage = document.createElement('img');
@@ -39,20 +35,65 @@ failImage.style.width = '100px';
 failImage.style.display = 'none';
 document.body.appendChild(failImage);
 
-// 화면 전환 함수
-function showScreen(screen) {
-    [startScreen, gameScreen, resultScreen, couponScreen].forEach(s => {
-        s.classList.add('hidden');
-    });
-    screen.classList.remove('hidden');
+// 게임 상태 변수들
+let currentAnswer = 0;
+let selectedValue = null;
+let consecutiveCorrect = 0;
+let timerInterval;
+
+// 음표 정의
+const notes = [
+    { value: 4, symbol: '𝅝', name: '온음표' },
+    { value: 3, symbol: '𝅗𝅥.', name: '점2분음표' },
+    { value: 2, symbol: '𝅗𝅥', name: '2분음표' },
+    { value: 1.5, symbol: '♩.', name: '점4분음표' },
+    { value: 1, symbol: '♩', name: '4분음표' },
+    { value: 0.5, symbol: '♪', name: '8분음표' }
+];
+
+// 음표 값으로 음표 객체 찾기
+function getNoteByValue(value) {
+    return notes.find(note => Math.abs(note.value - value) < 0.0001);
+}
+
+// 랜덤 음표 생성 함수
+function getRandomNote() {
+    // 문제 생성용 음표 (2분음표, 점4분음표, 4분음표, 8분음표만 사용)
+    const validNotes = notes.filter(note => [2, 1.5, 1, 0.5].includes(note.value));
+    return validNotes[Math.floor(Math.random() * validNotes.length)];
 }
 
 // 랜덤 문제 생성 함수
 function generateProblem() {
-    const num1 = Math.floor(Math.random() * 41) + 10; // 10-50
-    const num2 = Math.floor(Math.random() * 41) + 10; // 10-50
-    currentAnswer = num1 + num2;
-    problemElement.textContent = `${num1} + ${num2} = ?`;
+    const note1 = getRandomNote();
+    const note2 = getRandomNote();
+    currentAnswer = note1.value + note2.value;
+    
+    // 결과에 맞는 음표 찾기
+    const resultNote = getNoteByValue(currentAnswer);
+    
+    // 유효한 결과가 없으면 다시 생성
+    if (!resultNote) {
+        return generateProblem();
+    }
+    
+    // 음표 HTML 생성
+    const problemHTML = `
+        <div style="font-size: 3em; display: flex; align-items: center; justify-content: center; gap: 0.5em">
+            <span class="note">${note1.symbol}</span>
+            <span>+</span>
+            <span class="note">${note2.symbol}</span>
+            <span>=</span>
+            <span>?</span>
+        </div>
+    `;
+    
+    problemElement.innerHTML = problemHTML;
+    selectedAnswerElement.textContent = '';
+    selectedValue = null;
+    
+    // 모든 버튼의 선택 상태 초기화
+    noteButtons.forEach(btn => btn.classList.remove('selected'));
 }
 
 // 타이머 시작 함수
@@ -74,17 +115,33 @@ function startTimer() {
 // 게임 시작 함수
 function startGame() {
     showScreen(gameScreen);
-    answerInput.value = '';
     generateProblem();
     startTimer();
-    answerInput.focus();
     failImage.style.display = 'none'; // 이미지 숨기기
+}
+
+// 음표 선택 처리 함수
+function handleNoteSelection(event) {
+    const button = event.target;
+    const value = parseFloat(button.dataset.value);
+    
+    // 이전 선택 해제
+    noteButtons.forEach(btn => btn.classList.remove('selected'));
+    
+    // 새로운 선택
+    button.classList.add('selected');
+    selectedValue = value;
+    
+    // 선택된 음표 표시
+    const selectedNote = getNoteByValue(value);
+    selectedAnswerElement.textContent = selectedNote.symbol;
 }
 
 // 정답 체크 함수
 function checkAnswer() {
-    const userAnswer = parseInt(answerInput.value);
-    if (userAnswer === currentAnswer) {
+    if (selectedValue === null) return; // 음표가 선택되지 않은 경우
+
+    if (Math.abs(selectedValue - currentAnswer) < 0.0001) {
         successSound.play();
         consecutiveCorrect++;
         scoreCount.textContent = consecutiveCorrect;
@@ -98,6 +155,14 @@ function checkAnswer() {
     } else {
         handleGameOver();
     }
+}
+
+// 화면 전환 함수
+function showScreen(screen) {
+    [startScreen, gameScreen, resultScreen, couponScreen].forEach(s => {
+        s.classList.add('hidden');
+    });
+    screen.classList.remove('hidden');
 }
 
 // 게임 오버 함수
@@ -181,12 +246,7 @@ homeButton.addEventListener('click', () => showScreen(startScreen));
 saveCouponButton.addEventListener('click', saveCoupon);
 couponHomeButton.addEventListener('click', () => showScreen(startScreen));
 
-// 엔터 키로 정답 제출
-answerInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        checkAnswer();
-    }
-});
-
-// 초기 화면 표시
-showScreen(startScreen); 
+// 음표 버튼 이벤트 리스너 등록
+noteButtons.forEach(button => {
+    button.addEventListener('click', handleNoteSelection);
+}); 

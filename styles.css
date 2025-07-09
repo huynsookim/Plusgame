@@ -103,22 +103,16 @@ p {
 
 .input-container {
     display: flex;
+    flex-direction: column;
     gap: 1rem;
     align-items: center;
 }
 
-input[type="number"] {
-    padding: 1rem;
-    font-size: 1.8rem;
-    border: 2px solid #ddd;
-    border-radius: 5px;
-    width: 180px;
-    text-align: center;
-}
-
-input[type="number"]:focus {
-    outline: none;
-    border-color: #4CAF50;
+.note-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
 }
 
 /* 결과 화면 스타일 */
@@ -172,9 +166,7 @@ canvas {
         font-size: 3rem;
     }
 
-    input[type="number"] {
-        padding: 0.8rem;
-        font-size: 1.5rem;
-        width: 140px;
+    .note-buttons {
+        grid-template-columns: repeat(2, 1fr);
     }
 } 
