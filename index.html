@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>더하기 빨리 계산하기!</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 시작 화면 -->
+        <div id="startScreen" class="screen">
+            <h1>🧮 더하기 빨리 계산하기! 🧮</h1>
+            <p>👉 5초 안에 문제를 풀고 정답을 입력하세요!</p>
+            <p>3문제 연속 정답 시 음료수 쿠폰이 지급됩니다!</p>
+            <p>준비되면 시작 버튼을 눌러주세요!</p>
+            <button id="startButton" class="btn">시작하기 ▶️</button>
+        </div>
+
+        <!-- 게임 화면 -->
+        <div id="gameScreen" class="screen hidden">
+            <div class="score">연속 정답: <span id="scoreCount">0</span>/3</div>
+            <div class="timer">
+                <div id="timerBar"></div>
+            </div>
+            <div class="problem" id="problem"></div>
+            <div class="input-container">
+                <input type="number" id="answerInput" placeholder="답을 입력하세요">
+                <button id="submitButton" class="btn">확인</button>
+            </div>
+        </div>
+
+        <!-- 결과 화면 -->
+        <div id="resultScreen" class="screen hidden">
+            <h2>시간 초과 또는 오답입니다!</h2>
+            <div class="button-container">
+                <button id="retryButton" class="btn">다시 하기 🔁</button>
+                <button id="homeButton" class="btn">홈으로 🏠</button>
+            </div>
+        </div>
+
+        <!-- 쿠폰 화면 -->
+        <div id="couponScreen" class="screen hidden">
+            <h2>🎉 축하합니다! 3문제를 연속 정답하셨어요!</h2>
+            <div class="coupon">
+                <h3>🥤 음료수 1잔 무료 쿠폰</h3>
+                <canvas id="couponCanvas"></canvas>
+            </div>
+            <div class="button-container">
+                <button id="saveCouponButton" class="btn">쿠폰 저장하기 💾</button>
+                <button id="couponHomeButton" class="btn">홈으로 🏠</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 오디오 요소 -->
+    <audio id="successSound" src="assets/Ascending 3.mp3"></audio>
+    <audio id="failSound" src="assets/fail_02.mp3"></audio>
+    <audio id="couponSound" src="assets/suc_01.mp3"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html> 

@@ -1,0 +1,180 @@
+/* 전체 스타일 초기화 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 414px;
+    height: 100vh;
+    max-height: 736px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+/* 시작 화면 스타일 */
+h1 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+p {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: #666;
+    line-height: 1.5;
+}
+
+.btn {
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 0.5rem;
+}
+
+.btn:hover {
+    background-color: #45a049;
+}
+
+/* 게임 화면 스타일 */
+.score {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.timer {
+    width: 100%;
+    height: 10px;
+    background-color: #ddd;
+    position: absolute;
+    top: 60px;
+}
+
+#timerBar {
+    width: 100%;
+    height: 100%;
+    background-color: #4CAF50;
+    transition: width 0.1s linear;
+}
+
+.problem {
+    font-size: 3rem;
+    margin: 2rem 0;
+    color: #333;
+}
+
+.input-container {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+input[type="number"] {
+    padding: 1rem;
+    font-size: 1.5rem;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    width: 150px;
+    text-align: center;
+}
+
+input[type="number"]:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+/* 결과 화면 스타일 */
+h2 {
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.button-container {
+    display: flex;
+    gap: 1rem;
+}
+
+/* 쿠폰 화면 스타일 */
+.coupon {
+    background-color: #f9f9f9;
+    padding: 2rem;
+    border-radius: 10px;
+    margin: 2rem 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+canvas {
+    margin-top: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 414px) {
+    .app-container {
+        height: 100vh;
+        max-height: none;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    p {
+        font-size: 1rem;
+    }
+
+    .btn {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    .problem {
+        font-size: 2.5rem;
+    }
+
+    input[type="number"] {
+        padding: 0.8rem;
+        font-size: 1.2rem;
+        width: 120px;
+    }
+} 
